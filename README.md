@@ -1,2 +1,7 @@
 # apollo-graphql-demo
-learn apollo-graphql
+
+# server
+express
+
+# client
+react + parcel
