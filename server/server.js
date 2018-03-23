@@ -9,6 +9,9 @@ const BookTypeDef = require('./BookTypeDef')
 
 const { BookModel } = require('./db');
 
+const {ApolloEngine} = require('apollo-engine');
+
+const APOLLO_ENGINE_KEY = 'service:brucecodezone-1271:obwNr3WK1MOVNk5Tppk-xQ';
 // 手动添加两条数据
 // const books = [
 //     {
@@ -49,9 +52,24 @@ const schema = makeExecutableSchema({
 const port = process.env.port || 8092;
 const app = express();
 app.use(cors());
-app.use('/graphql', bodyParser.json(), graphqlExpress({ schema }));
+app.use('/graphql', bodyParser.json(), graphqlExpress(
+  { 
+    schema,
+    tracing:true,
+    cacheControl:true,
+   }
+  ));
 app.use('/graphiql', graphiqlExpress({ endpointURL: '/graphql' }));
 
-app.listen(port, () => {
-  console.log('express graphql server start');
+const engine = new ApolloEngine({
+  apiKey:APOLLO_ENGINE_KEY,
+});
+
+// app.listen(port, () => {
+//   console.log('express graphql server start');
+// });
+
+engine.listen({
+  port:port,
+  expressApp:app,
 });
