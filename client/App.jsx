@@ -1,6 +1,7 @@
 import React,{Component} from 'react';
 import {gql} from 'apollo-boost';
 import {Query} from 'react-apollo';
+import {Button, Modal} from 'antd';
 
 const GET_BOOK = gql`
     query getBooks{
@@ -12,6 +13,23 @@ const GET_BOOK = gql`
 `;
 
 export default class App extends Component{
+
+    constructor(props){
+        super(props);
+
+        this.state = {
+            showModal:false,
+        }
+    }
+
+    addBook(){
+        console.log('addBook click',this.state);
+        let modal = !this.state.showModal;
+        this.setState({
+            showModal:modal,
+        })
+    }
+
     render(){
         return(
             <Query query={GET_BOOK}>
@@ -26,15 +44,20 @@ export default class App extends Component{
     
                     return(
                         <div>
+                            <Button type="primary" onClick={addBook.bind(this)}>add</Button>
                             {
                                 data.books.map((book,index)=>{
                                     return (
                                         <ul key={index}>
-                                            <li>{book.title}</li>
-                                            <li>{book.author}</li>
+                                            <li>书名：{book.title} 作者：{book.author}</li>
                                         </ul>)
                                 })
                             }
+                            <Modal
+                                visible={true}
+                            >
+                                <p>hello</p>
+                            </Modal>
                         </div>
                     )
                 }
